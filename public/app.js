@@ -32,11 +32,17 @@
 		.controller('UserCtrl' ,['$scope', '$http', '$uibModal', 'LoginService', function($scope, $http, $uibModal, LoginService){
 			var self = this;
 			
-			LoginService.getUser().success(function(data){
-				//if use then, the username should be like
-				//data.data.username
-				self.username = data.username;
+			// .getUser().success(function(data){
+			// 	//if use then, the username should be like
+			// 	//dLoginServiceata.data.username
+			// 	self.username = data.username;
+			// })
+
+			LoginService.getUser().then(function(info){
+				self.username = info.data.username;
 			})
+
+
 			self.logout = function() {
 				self.logout = LoginService.logout().then(function() {
 					delete self.username
@@ -75,6 +81,7 @@
 			LoginService.loginModal = $uibModal.open({
 				templateUrl: 'login.html',
 				controller: 'LoginCtrl',
+				controllerAs: 'login'
 			});
 			LoginService.loginModal.result.then(function(data) {
 				self.username = data.username

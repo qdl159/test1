@@ -6,6 +6,7 @@ var passport = require('passport');
 var Account = require('../models/account');
 
 router.post('/', function(req, res, next){
+	console.log('login post', req.body);
 	//for login and register
 	var user = req.body;
 	console.log('post user', user);

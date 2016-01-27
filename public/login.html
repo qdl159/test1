@@ -3,25 +3,25 @@
 		<h3>Login Form</h3>
 	</div>
 	<div class="modal-body">
-	<form class="form" ng-show="! username">
+	<form class="form">
 		<div class="form-group col-md-6">
 			<label>User Name</label>
-			<input type="text" class="form-control" ng-model="user.username">
+			<input type="text" class="form-control" ng-model="login.user.username">
 		</div>
 		<div class="form-group col-md-6">
 			<label>Password</label>
-			<input type="password" class="form-control" ng-model="user.password">
+			<input type="password" class="form-control" ng-model="login.user.password">
 		</div>
 	</form>
-	<span style="color: red;" ng-show="!!errmsg" ng-bind-html="errmsg"></span>
+	<span style="color: red;" ng-show="!!login.errmsg" ng-bind-html="login.errmsg"></span>
 	</div>
 	<div class="modal-footer">
 		<div>
-			<button class="btn btn-primary"  ng-click="signup(user)">Sign Up</button>
-			<button class="btn btn-success"  ng-click="login(user)">Login</button>
+			<button class="btn btn-primary"  ng-click="login.signup(login.user)">Sign Up</button>
+			<button class="btn btn-success"  ng-click="login.login(login.user)">Login</button>
 		</div>
 	</div>
-	<div ng-show="!! username">Welcome, {{username}}!
+	<!-- <div ng-show="!! username">Welcome, {{username}}!
 		<button ng-click="logout()">Logout</button>
-	</div>
+	</div> -->
 </div>	
