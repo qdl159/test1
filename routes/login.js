@@ -2,46 +2,42 @@ var express = require('express');
 var router = express.Router();
 var db = require('mongodb').MongoClient.connect('mongodb://localhost/test')
 var Q = require('q');
+var passport = require('passport');
+var Account = require('../models/account');
 
 router.post('/', function(req, res, next){
+	//for login and register
 	var user = req.body;
-	var isLogin = user.isLogin || false;
-	delete user.isLogin;
-	// TODO, seperate login and sign up
-	db.then(function(db){
-		if (isLogin){
-			return db.collection('users').find(user).toArray();
-		}else
-			return db.collection('users').insert(user)
-	}).then(function(users){
-		if(!isLogin || users.length > 0) {
-		var defer = Q.defer();
-		req.session.user = user;
-		req.session.save(function(err){
+	console.log('post user', user);
+	Account.register(
+		new Account({
+			username: user.username
+		}), 
+		user.password, 
+		function(err, account){
+			console.log('after save', err, account);
 			if(err) {
-				defer.reject(err);
+				res.json({})
 			} else {
-				defer.resolve(isLogin ? {
-					status: users.length > 0
-				}: user);
+				passport.authenticate('local')(req, res, function(){
+					res.json(
+						{
+							username: account.username
+					})
+				});
 			}
 		});
-		return defer.promise;
-		}else {
-			return {};
-		}
-	})
-	.then(res.json.bind(res))
-	.catch(function(err){
-		console.log('insert user fail', err);
-		next(err);
-	});
 });
 
 router.get('/', function(req, res, next){
-	var username;
-	if (req.session.user) username = req.session.user.name;
-	res.json({username: username})
+	// var username;
+	// if (req.session.user) username = req.session.user.name;
+	// res.json({username: username})
+	if (req.user) {
+		res.json({username: req.user.username});
+	} else {
+		res.json({})
+	}
 });
 
 router.get('/logout', function(req, res, next){

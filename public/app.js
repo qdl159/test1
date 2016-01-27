@@ -1,7 +1,23 @@
 (function(){
 	'use strict';
 
-	angular.module('main', ['ui.bootstrap'])
+	angular.module('main', ['ui.bootstrap', 'ui.router'])
+		.config(function($stateProvider, $urlRouterProvider){
+			$urlRouterProvider.otherwise('/');
+			$stateProvider
+				.state('list', {
+					url: '/',
+					templateUrl: 'list.html',
+					controller: 'UserCtrl',
+					controllerAs: 'user'
+				})
+				.state('user', {
+					url: '/user',
+					templateUrl: 'user.html',
+					controller: 'UserCtrl',
+					controllerAs: 'user'
+				})
+		})
 		.service('LoginService', function($http){
 			var self = this;
 			self.getUser = function() {
